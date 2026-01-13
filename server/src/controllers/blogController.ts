@@ -23,7 +23,7 @@ export const createBlog = async (req: AuthRequest, res: Response) => {
 
 export const getBlogs = async (req: Request, res: Response) => {
     try {
-        const pageSize = 10;
+        const pageSize = 9;
         const page = Number(req.query.pageNumber) || 1;
         const language = req.query.language || 'en';
         const search = req.query.search ? String(req.query.search) : '';
