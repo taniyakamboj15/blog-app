@@ -9,6 +9,7 @@ dotenv.config();
 
 import authRoutes from './routes/authRoutes';
 import blogRoutes from './routes/blogRoutes';
+import commentRoutes from './routes/commentRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +40,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/blogs/:blogId/comments', commentRoutes); // Mounts /:blogId/comments
 
 app.get('/', (req, res) => {
     res.send('Blog App Backend is running');

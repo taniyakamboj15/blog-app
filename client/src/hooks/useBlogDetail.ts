@@ -8,11 +8,13 @@ interface Blog {
     title: string;
     content: string;
     author: {
+        _id: string;
         username: string;
     };
     tags: string[];
     createdAt: string;
     language: string;
+    likes: string[];
 }
 
 export const useBlogDetail = () => {

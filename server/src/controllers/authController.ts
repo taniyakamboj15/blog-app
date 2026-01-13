@@ -96,3 +96,31 @@ export const getMe = async (req: any, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const updateUserProfile = async (req: any, res: Response) => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        if (user) {
+            user.username = req.body.username || user.username;
+            user.email = req.body.email || user.email;
+
+            if (req.body.password) {
+                user.password = req.body.password;
+            }
+
+            const updatedUser = await user.save();
+
+            res.json({
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                role: updatedUser.role,
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};

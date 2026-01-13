@@ -5,7 +5,7 @@ import axios from 'axios';
 import { ZodError } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { setCredentials } from '../redux/slices/authSlice';
-import { RootState } from '../redux/store';
+import type { RootState } from '../redux/store';
 import { loginSchema, formatZodErrors } from '../utils/validation';
 
 export const useLogin = () => {

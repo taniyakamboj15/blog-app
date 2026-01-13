@@ -12,7 +12,9 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    userInfo: null,
+    userInfo: localStorage.getItem('userInfo') 
+        ? JSON.parse(localStorage.getItem('userInfo')!) 
+        : null,
     loading: false,
     error: null,
 };
@@ -25,11 +27,13 @@ const authSlice = createSlice({
             state.userInfo = action.payload;
             state.loading = false;
             state.error = null;
+            localStorage.setItem('userInfo', JSON.stringify(action.payload));
         },
         logout: (state) => {
             state.userInfo = null;
             state.loading = false;
             state.error = null;
+            localStorage.removeItem('userInfo');
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;

@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom';
-import { Calendar, User, Tag, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Calendar, User, Tag, ArrowLeft, Edit, Trash2 } from 'lucide-react';
 import { useBlogDetail } from '../hooks/useBlogDetail';
+import LikeButton from '../components/LikeButton';
+import ShareButton from '../components/ShareButton';
+import CommentSection from '../components/comments/CommentSection';
+import { useSelector } from 'react-redux';
+import { type RootState } from '../redux/store';
+import axios from 'axios';
 
 const BlogDetail = () => {
     const { blog, loading, t } = useBlogDetail();
+    const { userInfo } = useSelector((state: RootState) => state.auth);
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -46,14 +54,50 @@ const BlogDetail = () => {
                         ))}
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
-                        {blog.title}
-                    </h1>
-
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                            {blog.title}
+                        </h1>
+                        {userInfo && (userInfo._id === blog.author._id || userInfo.role === 'admin') && (
+                            <div className="flex gap-2">
+                                <Link
+                                    to={`/edit-blog/${blog._id}`}
+                                    className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-all"
+                                    title={t('edit')}
+                                >
+                                    <Edit size={20} />
+                                </Link>
+                                <button
+                                    onClick={async () => {
+                                        if (confirm(t('delete_confirm'))) {
+                                            try {
+                                                await axios.delete(`http://localhost:5000/api/blogs/${blog._id}`, { withCredentials: true });
+                                                navigate('/');
+                                            } catch (e) {
+                                                alert('Failed to delete');
+                                            }
+                                        }
+                                    }}
+                                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                                    title={t('delete')}
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    
                     <div
                         className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed"
                         dangerouslySetInnerHTML={{ __html: blog.content }}
                     />
+
+                    <div className="flex items-center justify-between py-8 border-t border-gray-100 dark:border-gray-800 mt-8">
+                        <LikeButton blogId={blog._id} initialLikes={blog.likes || []} />
+                        <ShareButton />
+                    </div>
+
+                    <CommentSection blogId={blog._id} />
                 </div>
             </article>
         </div>

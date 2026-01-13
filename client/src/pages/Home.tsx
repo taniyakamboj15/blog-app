@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 
 interface Blog {
     _id: string;
@@ -11,6 +12,7 @@ interface Blog {
         username: string;
     };
     createdAt: string;
+    likes: string[];
 }
 
 const Home = () => {
@@ -60,6 +62,14 @@ const Home = () => {
                                     <span>{blog.author.username}</span>
                                     <span>•</span>
                                     <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                                    {blog.likes && (
+                                        <>
+                                            <span>•</span>
+                                            <span className="flex items-center gap-1 text-pink-600">
+                                                 <Heart size={14} fill="currentColor" /> {blog.likes.length}
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
                                     <Link to={`/blog/${blog._id}`}>
