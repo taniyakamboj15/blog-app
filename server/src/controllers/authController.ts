@@ -1,0 +1,98 @@
+import { Request, Response } from 'express';
+import User, { IUser } from '../models/User';
+import jwt from 'jsonwebtoken';
+
+const generateToken = (id: string) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET as string, {
+        expiresIn: '30d',
+    });
+};
+
+export const registerUser = async (req: Request, res: Response) => {
+    const { username, email, password, role } = req.body;
+
+    try {
+        const userExists = await User.findOne({ email });
+
+        if (userExists) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        const user = await User.create({
+            username,
+            email,
+            password,
+            role: role || 'author', // Default to author if not specified
+        });
+
+        const token = generateToken(user._id as unknown as string);
+
+        // Set cookie
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        });
+
+        res.status(201).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (user && (await user.comparePassword(password))) {
+            const token = generateToken(user._id as unknown as string);
+
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'strict',
+                maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            });
+
+            res.json({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid email or password' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const logoutUser = (req: Request, res: Response) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    res.status(200).json({ message: 'Logged out' });
+};
+
+export const getMe = async (req: any, res: Response) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
