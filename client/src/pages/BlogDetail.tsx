@@ -7,11 +7,14 @@ import CommentSection from '../components/comments/CommentSection';
 import { useSelector } from 'react-redux';
 import { type RootState } from '../redux/store';
 import axios from 'axios';
+import ConfirmationModal from '../components/modals/ConfirmationModal';
+import { useState } from 'react';
 
 const BlogDetail = () => {
     const { blog, loading, t } = useBlogDetail();
     const { userInfo } = useSelector((state: RootState) => state.auth);
     const navigate = useNavigate();
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     if (loading) {
         return (
@@ -25,8 +28,27 @@ const BlogDetail = () => {
         return <div className="text-center py-20 text-gray-500">{t('blog_not_found')}</div>;
     }
 
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`http://localhost:5000/api/blogs/${blog._id}`, { withCredentials: true });
+            navigate('/');
+        } catch (e) {
+            alert('Failed to delete');
+        }
+    };
+
     return (
         <div className="max-w-4xl mx-auto animate-in fade-in duration-500">
+            <ConfirmationModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
+                title={t('delete_blog_title') || "Delete Blog"}
+                message={t('delete_blog_confirm') || "Are you sure you want to delete this blog? This action cannot be undone."}
+                confirmText={t('delete')}
+                isDangerous={true}
+            />
+
             <Link
                 to="/"
                 className="inline-flex items-center gap-2 text-gray-500 hover:text-indigo-600 mb-8 transition-colors"
@@ -68,16 +90,7 @@ const BlogDetail = () => {
                                     <Edit size={20} />
                                 </Link>
                                 <button
-                                    onClick={async () => {
-                                        if (confirm(t('delete_confirm'))) {
-                                            try {
-                                                await axios.delete(`http://localhost:5000/api/blogs/${blog._id}`, { withCredentials: true });
-                                                navigate('/');
-                                            } catch (e) {
-                                                alert('Failed to delete');
-                                            }
-                                        }
-                                    }}
+                                    onClick={() => setShowDeleteModal(true)}
                                     className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
                                     title={t('delete')}
                                 >
@@ -97,7 +110,7 @@ const BlogDetail = () => {
                         <ShareButton />
                     </div>
 
-                    <CommentSection blogId={blog._id} />
+                    <CommentSection blogId={blog._id} blogAuthorId={blog.author._id} />
                 </div>
             </article>
         </div>

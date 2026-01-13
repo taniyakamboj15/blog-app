@@ -7,9 +7,10 @@ import CommentItem from './CommentItem';
 
 interface CommentSectionProps {
     blogId: string;
+    blogAuthorId?: string;
 }
 
-const CommentSection = ({ blogId }: CommentSectionProps) => {
+const CommentSection = ({ blogId, blogAuthorId }: CommentSectionProps) => {
     const [comments, setComments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(3);
@@ -73,6 +74,7 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
                                 allComments={comments}
                                 blogId={blogId}
                                 onCommentAdded={handleCommentAdded}
+                                blogAuthorId={blogAuthorId}
                             />
                         ))}
                     </>

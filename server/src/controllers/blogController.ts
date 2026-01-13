@@ -26,15 +26,40 @@ export const getBlogs = async (req: Request, res: Response) => {
         const pageSize = 10;
         const page = Number(req.query.pageNumber) || 1;
         const language = req.query.language || 'en';
+        const search = req.query.search ? String(req.query.search) : '';
 
-        const count = await Blog.countDocuments({ language });
-        const blogs = await Blog.find({ language })
+        let query: any = { language };
+
+        if (search) {
+            const searchRegex = new RegExp(search, 'i');
+            
+            // Find authors matching the search term
+            const authors = await import('../models/User').then(m => m.default.find({ username: searchRegex }).select('_id'));
+            const authorIds = authors.map(author => author._id);
+
+            query = {
+                ...query,
+                $or: [
+                    { title: searchRegex },
+                    { tags: searchRegex },
+                    { author: { $in: authorIds } }
+                ]
+            };
+        }
+
+        const count = await Blog.countDocuments(query);
+        const blogs = await Blog.find(query)
             .populate('author', 'username')
             .limit(pageSize)
             .skip(pageSize * (page - 1))
             .sort({ createdAt: -1 });
 
-        res.json({ blogs, page, pages: Math.ceil(count / pageSize) });
+        res.json({ 
+            blogs, 
+            page, 
+            pages: Math.ceil(count / pageSize),
+            total: count 
+        });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

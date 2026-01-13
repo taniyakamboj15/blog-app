@@ -9,18 +9,24 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState<'info' | 'blogs'>('info');
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white px-4 md:px-0">
+        <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-600 dark:from-indigo-400 dark:to-pink-400 px-4 md:px-0">
                 {t('dashboard')}
             </h1>
 
             {/* Tabs */}
-            <div className="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mx-4 md:mx-0">
+            <div className="flex p-1.5 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl mx-4 md:px-0 relative">
+                <div 
+                    className={`absolute h-[calc(100%-12px)] top-1.5 w-[calc(50%-6px)] bg-white dark:bg-gray-700 rounded-xl shadow-sm transition-all duration-300 ease-in-out ${
+                        activeTab === 'blogs' ? 'translate-x-[calc(100%+6px)]' : 'translate-x-0'
+                    }`}
+                />
+                
                 <button
                     onClick={() => setActiveTab('info')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all relative z-10 ${
                         activeTab === 'info'
-                            ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-white shadow-sm'
+                            ? 'text-indigo-600 dark:text-white'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                 >
@@ -29,9 +35,9 @@ const Profile = () => {
                 </button>
                 <button
                     onClick={() => setActiveTab('blogs')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all relative z-10 ${
                         activeTab === 'blogs'
-                            ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-white shadow-sm'
+                            ? 'text-indigo-600 dark:text-white'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                 >

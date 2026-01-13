@@ -68,7 +68,20 @@ const resources = {
             "edit": "Edit",
             "delete": "Delete",
             "delete_confirm": "Are you sure you want to delete this?",
-            "blog_deleted": "Blog deleted successfully"
+            "blog_deleted": "Blog deleted successfully",
+            "delete_blog_title": "Delete Blog?",
+            "delete_blog_confirm": "Are you sure you want to delete this blog? This action cannot be undone.",
+            "delete_comment_title": "Delete Comment?",
+            "delete_comment_confirm": "Are you sure you want to delete this comment? This action cannot be undone.",
+            "explore_stories": "Explore Stories",
+            "explore_description": "Discover the latest vlogs, trends, and creative ideas from our community.",
+            "search_placeholder": "Search by title, author, or tags...",
+            "no_stories_found": "No stories found related to",
+            "no_stories_yet": "No stories yet. Be the first to write one!",
+            "end_of_list": "You've reached the end of the list.",
+            "latest_stories": "Latest Stories",
+            "view_all": "View All",
+            "fetching_stories": "Fetching amazing stories..."
         }
     },
     ar: {
@@ -136,7 +149,20 @@ const resources = {
             "edit": "تعديل",
             "delete": "حذف",
             "delete_confirm": "هل أنت متأكد أنك تريد حذف هذا؟",
-            "blog_deleted": "تم حذف المدونة بنجاح"
+            "blog_deleted": "تم حذف المدونة بنجاح",
+            "delete_blog_title": "حذف المدونة؟",
+            "delete_blog_confirm": "هل أنت متأكد أنك تريد حذف هذه المدونة؟ لا يمكن التراجع عن هذا الإجراء.",
+            "delete_comment_title": "حذف التعليق؟",
+            "delete_comment_confirm": "هل أنت متأكد أنك تريد حذف هذا التعليق؟ لا يمكن التراجع عن هذا الإجراء.",
+            "explore_stories": "استكشف القصص",
+            "explore_description": "اكتشف أحدث المدونات، والاتجاهات، والأفكار الإبداعية من مجتمعنا.",
+            "search_placeholder": "ابحث بالعنوان، المؤلف، أو الوسوم...",
+            "no_stories_found": "لم يتم العثور على قصص متعلقة بـ",
+            "no_stories_yet": "لا توجد قصص بعد. كن أول من يكتب واحدة!",
+            "end_of_list": "لقد وصلت إلى نهاية القائمة.",
+            "latest_stories": "أحدث القصص",
+            "view_all": "عرض الكل",
+            "fetching_stories": "جاري جلب القصص الرائعة..."
         }
     }
 };
