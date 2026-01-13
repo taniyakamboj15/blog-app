@@ -85,6 +85,7 @@ export const updateBlog = async (req: AuthRequest, res: Response) => {
         const blog = await Blog.findById(req.params.id);
 
         if (blog) {
+            // Strict check: IDs must be strings for comparison
             if (blog.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
                 return res.status(401).json({ message: 'Not authorized to update this blog' });
             }
@@ -109,6 +110,7 @@ export const deleteBlog = async (req: AuthRequest, res: Response) => {
         const blog = await Blog.findById(req.params.id);
 
         if (blog) {
+            // Strict check: IDs must be strings for comparison
             if (blog.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
                 return res.status(401).json({ message: 'Not authorized to delete this blog' });
             }

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../redux/store';
 import { logout } from '../redux/slices/authSlice';
-import { Menu, X, User, LogOut, Globe, PenTool } from 'lucide-react';
+import { Menu, X, User, LogOut, Globe, PenTool, Compass } from 'lucide-react';
 import axios from 'axios'; // We will move this to service later
 
 const Navbar = () => {
@@ -54,6 +54,14 @@ const Navbar = () => {
                         >
                             <Globe size={20} />
                         </button>
+
+                        <Link
+                            to="/blogs"
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                            <Compass size={20} />
+                            <span className="font-medium">{t('nav_explore')}</span>
+                        </Link>
 
                         {userInfo ? (
                             <>
@@ -119,6 +127,14 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 animate-in slide-in-from-top-4 duration-200">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        <Link
+                            to="/blogs"
+                            className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <Compass size={20} />
+                            <span>{t('nav_explore')}</span>
+                        </Link>
                         {userInfo ? (
                             <>
                                 <div className="px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200">

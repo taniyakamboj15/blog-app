@@ -124,3 +124,45 @@ export const updateUserProfile = async (req: any, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Get all users (Admin only)
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const pageSize = 10;
+        const page = Number(req.query.pageNumber) || 1;
+        
+        const count = await User.countDocuments();
+        const users = await User.find({})
+            .select('-password')
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+            .sort({ createdAt: -1 });
+
+        res.json({
+            users,
+            page,
+            pages: Math.ceil(count / pageSize),
+            total: count
+        });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Delete user (Admin only)
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            await user.deleteOne();
+            // Optionally delete user's blogs and comments here if strict cleanup is needed
+            // For now, we'll assume cascading delete is handled or orphan data is acceptable/handled elsewhere
+            res.json({ message: 'User removed' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};

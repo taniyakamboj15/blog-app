@@ -42,7 +42,7 @@ const Home = () => {
     }, [i18n.language]);
 
     return (
-        <div className="space-y-16 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16 pb-20">
             {/* Hero Section */}
             <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white shadow-2xl animate-in fade-in slide-in-from-top-8 duration-700">
                 {/* Abstract Patterns */}

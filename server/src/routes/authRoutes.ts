@@ -1,6 +1,6 @@
 import express from 'express';
-import { registerUser, loginUser, logoutUser, getMe, updateUserProfile } from '../controllers/authController';
-import { protect } from '../middleware/authMiddleware';
+import { registerUser, loginUser, logoutUser, getMe, updateUserProfile, getAllUsers, deleteUser } from '../controllers/authController';
+import { protect, authorize } from '../middleware/authMiddleware';
 import validateResource from '../middleware/validateResource';
 import { registerSchema, loginSchema } from '../schemas/authSchemas';
 
@@ -12,5 +12,11 @@ router.post('/logout', logoutUser);
 router.route('/profile')
     .get(protect, getMe)
     .put(protect, updateUserProfile);
+
+router.route('/users')
+    .get(protect, authorize('admin'), getAllUsers);
+
+router.route('/users/:id')
+    .delete(protect, authorize('admin'), deleteUser);
 
 export default router;

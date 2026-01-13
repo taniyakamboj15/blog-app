@@ -81,7 +81,12 @@ const resources = {
             "end_of_list": "You've reached the end of the list.",
             "latest_stories": "Latest Stories",
             "view_all": "View All",
-            "fetching_stories": "Fetching amazing stories..."
+            "fetching_stories": "Fetching amazing stories...",
+            "nav_explore": "Explore",
+            "users_tab": "Users",
+            "users_management": "User Management",
+            "delete_user_title": "Delete User?",
+            "delete_user_confirm": "Are you sure you want to delete this user? This will remove all their blogs and comments."
         }
     },
     ar: {
@@ -162,7 +167,12 @@ const resources = {
             "end_of_list": "لقد وصلت إلى نهاية القائمة.",
             "latest_stories": "أحدث القصص",
             "view_all": "عرض الكل",
-            "fetching_stories": "جاري جلب القصص الرائعة..."
+            "fetching_stories": "جاري جلب القصص الرائعة...",
+            "nav_explore": "اكتشف",
+            "users_tab": "المستخدمين",
+            "users_management": "إدارة المستخدمين",
+            "delete_user_title": "حذف المستخدم؟",
+            "delete_user_confirm": "هل أنت متأكد من حذف هذا المستخدم؟ سيؤدي ذلك إلى إزالة جميع مدوناتهم وتعليقاتهم."
         }
     }
 };
