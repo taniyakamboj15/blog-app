@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { PenTool, Loader } from 'lucide-react';
+import { useCreateBlog } from '../hooks/useCreateBlog';
 
 // Custom toolbar options
 const modules = {
@@ -19,38 +17,20 @@ const modules = {
 };
 
 const CreateBlog = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [language, setLanguage] = useState('en');
-    const [tags, setTags] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
-    const navigate = useNavigate();
-    const { t } = useTranslation();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
-
-        try {
-            const tagsArray = tags.split(',').map(tag => tag.trim());
-
-            await axios.post('http://localhost:5000/api/blogs', {
-                title,
-                content,
-                language,
-                tags: tagsArray
-            }, { withCredentials: true });
-
-            navigate('/'); // Or navigate to the new blog
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to create blog');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        title,
+        setTitle,
+        content,
+        setContent,
+        language,
+        setLanguage,
+        tags,
+        setTags,
+        loading,
+        error,
+        handleSubmit,
+        t
+    } = useCreateBlog();
 
     return (
         <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -73,19 +53,19 @@ const CreateBlog = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Blog Title</label>
+                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('blog_title_label')}</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-gray-900 dark:text-white"
-                                placeholder="Enter an engaging title"
+                                placeholder={t('blog_title_placeholder')}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Language</label>
+                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('language_label')}</label>
                             <select
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
@@ -98,7 +78,7 @@ const CreateBlog = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Content</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('content_label')}</label>
                         <div className="prose-editor dark:text-white">
                             <ReactQuill
                                 theme="snow"
@@ -111,7 +91,7 @@ const CreateBlog = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags (comma separated)</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('tags_label')}</label>
                         <input
                             type="text"
                             value={tags}
@@ -128,7 +108,7 @@ const CreateBlog = () => {
                             className="flex items-center gap-2 py-3 px-8 bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transform transition hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             {loading && <Loader className="animate-spin" size={20} />}
-                            {loading ? 'Publishing...' : 'Publish Blog'}
+                            {loading ? t('publishing') : t('publish_btn')}
                         </button>
                     </div>
                 </form>

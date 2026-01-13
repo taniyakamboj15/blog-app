@@ -1,43 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowLeft } from 'lucide-react';
-
-interface Blog {
-    _id: string;
-    title: string;
-    content: string;
-    author: {
-        username: string;
-    };
-    tags: string[];
-    createdAt: string;
-    language: string;
-}
+import { useBlogDetail } from '../hooks/useBlogDetail';
 
 const BlogDetail = () => {
-    const { id } = useParams();
-    const [blog, setBlog] = useState<Blog | null>(null);
-    const [loading, setLoading] = useState(true);
-    const { t } = useTranslation();
-
-    useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                const { data } = await axios.get(`http://localhost:5000/api/blogs/${id}`);
-                setBlog(data);
-                // Set document direction based on blog language
-                // document.dir = data.language === 'ar' ? 'rtl' : 'ltr'; 
-                // Or keep app language? Usually app language overrides.
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBlog();
-    }, [id]);
+    const { blog, loading, t } = useBlogDetail();
 
     if (loading) {
         return (
@@ -48,7 +14,7 @@ const BlogDetail = () => {
     }
 
     if (!blog) {
-        return <div className="text-center py-20 text-gray-500">Blog not found</div>;
+        return <div className="text-center py-20 text-gray-500">{t('blog_not_found')}</div>;
     }
 
     return (
@@ -58,7 +24,7 @@ const BlogDetail = () => {
                 className="inline-flex items-center gap-2 text-gray-500 hover:text-indigo-600 mb-8 transition-colors"
             >
                 <ArrowLeft size={20} />
-                {t('back_to_home', { defaultValue: 'Back to Home' })}
+                {t('back_to_home')}
             </Link>
 
             <article className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">

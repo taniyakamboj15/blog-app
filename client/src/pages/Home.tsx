@@ -40,7 +40,7 @@ const Home = () => {
                     {t('welcome')}
                 </h1>
                 <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                    Discover stories, thinking, and expertise from writers on any topic.
+                    {t('home_description')}
                 </p>
             </div>
 

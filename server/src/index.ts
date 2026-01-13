@@ -3,11 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import connectDB from './db';
+import connectDB from './config/db';
 
 dotenv.config();
-
-connectDB();
 
 import authRoutes from './routes/authRoutes';
 import blogRoutes from './routes/blogRoutes';
@@ -15,10 +13,26 @@ import blogRoutes from './routes/blogRoutes';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(helmet());
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173', // Vite default port
-    credentials: true
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -30,6 +44,6 @@ app.get('/', (req, res) => {
     res.send('Blog App Backend is running');
 });
 
-app.listen(PORT, () => {
+connectDB().then(() => app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+}));
