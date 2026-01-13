@@ -10,7 +10,7 @@ const MainLayout = () => {
                 <Outlet />
             </main>
             <footer className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                © {new Date().getFullYear()} BlogApp. All rights reserved.
+                © {new Date().getFullYear()} DevScribe. All rights reserved.
             </footer>
         </div>
     );
