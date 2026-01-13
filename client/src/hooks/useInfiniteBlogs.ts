@@ -31,9 +31,14 @@ export const useInfiniteBlogs = (searchTerm: string) => {
 
                 setBlogs(prev => {
                     if (page === 1) return data.blogs;
-                    // Filter duplicates just in case
-                    const newIds = new Set(data.blogs.map((b: any) => b._id));
-                    return [...prev, ...data.blogs.filter((b: any) => !newIds.has(b._id))];
+                    
+                    // Create a Set of existing IDs for efficient lookup
+                    const existingIds = new Set(prev.map((b: any) => b._id));
+                    
+                    // Filter out blogs that are already in the state
+                    const uniqueNewBlogs = data.blogs.filter((b: any) => !existingIds.has(b._id));
+                    
+                    return [...prev, ...uniqueNewBlogs];
                 });
 
                 setHasMore(page < data.pages);

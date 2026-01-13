@@ -5,7 +5,7 @@ export interface IComment extends Document {
     blog: mongoose.Types.ObjectId;
     author: mongoose.Types.ObjectId;
     parentComment?: mongoose.Types.ObjectId;
-    replies: mongoose.Types.ObjectId[]; // Virtual population usually, but fine for basic ref
+    replies: mongoose.Types.ObjectId[]; 
 }
 
 const CommentSchema: Schema = new Schema({

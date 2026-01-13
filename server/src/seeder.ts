@@ -81,7 +81,7 @@ const destroyData = async () => {
 
     try {
         await Blog.deleteMany();
-        await User.deleteMany(); // Be careful with this one
+        await User.deleteMany(); 
 
         console.log('Data Destroyed!');
         process.exit();

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import Comment from '../models/Comment';
 import { AuthRequest } from '../middleware/authMiddleware';
-
+import Blog from '../models/Blog'; 
 export const addComment = async (req: AuthRequest, res: Response) => {
     try {
         const { content, parentComment } = req.body;
@@ -26,11 +26,7 @@ export const addComment = async (req: AuthRequest, res: Response) => {
 export const getComments = async (req: AuthRequest, res: Response) => {
     try {
         const blogId = req.params.blogId;
-        
-        // Fetch top-level comments (those without a parent) and populate their replies
-        // This is a simplified approach. For deep nesting, recursive fetch or flat list is needed.
-        // Here we fetch all comments and let frontend build the tree, OR fetch root comments and populate 1 level.
-        // Let's fetch ALL comments for the blog and sort by createdAt. Frontend can structure them.
+
         const comments = await Comment.find({ blog: blogId })
             .populate('author', 'username')
             .sort({ createdAt: -1 });
@@ -40,10 +36,7 @@ export const getComments = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
-// ... (previous imports)
-import Blog from '../models/Blog'; // Ensure Blog is imported
 
-// ... (previous functions)
 
 export const deleteComment = async (req: any, res: Response) => {
     try {

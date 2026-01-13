@@ -156,9 +156,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
         if (user) {
             await user.deleteOne();
-            // Optionally delete user's blogs and comments here if strict cleanup is needed
-            // For now, we'll assume cascading delete is handled or orphan data is acceptable/handled elsewhere
-            res.json({ message: 'User removed' });
+           res.json({ message: 'User removed' });
         } else {
             res.status(404).json({ message: 'User not found' });
         }
